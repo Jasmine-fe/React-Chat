@@ -11,8 +11,6 @@ import Skeleton from "./Skeleton";
 
 class Messages extends React.Component {
   state = {
-    privateChannel: this.props.isPrivateChannel,
-    privateMessagesRef: firebase.database().ref("privateMessages"),
     messagesRef: firebase.database().ref("messages"),
     messages: [],
     messagesLoading: true,
@@ -88,8 +86,7 @@ class Messages extends React.Component {
   };
 
   getMessagesRef = () => {
-    const { messagesRef, privateMessagesRef, privateChannel } = this.state;
-    return privateChannel ? privateMessagesRef : messagesRef;
+    return  this.state.messagesRef;
   };
 
   handleSearchChange = event => {
@@ -157,7 +154,7 @@ class Messages extends React.Component {
 
   displayChannelName = channel => {
     return channel
-      ? `${this.state.privateChannel ? "@" : "#"}${channel.name}`
+      ? `#${channel.name}`
       : "";
   };
 
@@ -172,7 +169,7 @@ class Messages extends React.Component {
     ) : null;
 
   render() {
-    const { messagesRef, messages, channel, user, numUniqueUsers, searchTerm, searchResults, searchLoading, privateChannel, messagesLoading } = this.state;
+    const { messagesRef, messages, channel, user, numUniqueUsers, searchTerm, searchResults, searchLoading, messagesLoading } = this.state;
     return (
       <React.Fragment>
         <MessagesHeader
@@ -180,7 +177,6 @@ class Messages extends React.Component {
           numUniqueUsers={numUniqueUsers}
           handleSearchChange={this.handleSearchChange}
           searchLoading={searchLoading}
-          isPrivateChannel={privateChannel}
         />
 
         <Segment>
@@ -197,7 +193,6 @@ class Messages extends React.Component {
           messagesRef={messagesRef}
           currentChannel={channel}
           currentUser={user}
-          isPrivateChannel={privateChannel}
           getMessagesRef={this.getMessagesRef}
         />
       </React.Fragment>

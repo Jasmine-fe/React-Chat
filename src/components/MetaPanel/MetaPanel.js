@@ -11,7 +11,6 @@ import {
 class MetaPanel extends React.Component {
   state = {
     channel: this.props.currentChannel,
-    privateChannel: this.props.isPrivateChannel,
     activeIndex: 0
   };
 
@@ -39,11 +38,8 @@ class MetaPanel extends React.Component {
       .slice(0, 2);
 
   render() {
-    const { activeIndex, privateChannel, channel } = this.state;
+    const { activeIndex, channel } = this.state;
     const { userPosts } = this.props;
-
-    if (privateChannel) return null;
-
     return (
       <Segment loading={!channel}>
         <Header as="h3" attached="top">

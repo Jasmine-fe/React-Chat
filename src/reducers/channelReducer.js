@@ -2,7 +2,6 @@ import * as actionTypes from "../actions/types";
 
 const initialChannelState = {
     currentChannel: null,
-    isPrivateChannel: false,
     userPosts: null
   };
   
@@ -12,11 +11,6 @@ const initialChannelState = {
         return {
           ...state,
           currentChannel: action.payload.currentChannel
-        };
-      case actionTypes.SET_PRIVATE_CHANNEL:
-        return {
-          ...state,
-          isPrivateChannel: action.payload.isPrivateChannel
         };
       case actionTypes.SET_USER_POSTS:
         return {
