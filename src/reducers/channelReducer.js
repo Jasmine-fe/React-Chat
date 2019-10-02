@@ -10,6 +10,7 @@ const initialChannelState = {
       case actionTypes.SET_CURRENT_CHANNEL:
         return {
           ...state,
+          userPosts: {},
           currentChannel: action.payload.currentChannel
         };
       case actionTypes.SET_USER_POSTS:
