@@ -14,7 +14,8 @@ class Channels extends React.Component {
     channelDetails: "",
     channelsRef: firebase.database().ref("channels"),
     messagesRef: firebase.database().ref("messages"),
-    modal: false,
+    addChannelModal: false,
+    subChannelModal: false,
     firstLoad: true
   };
 
@@ -51,6 +52,14 @@ class Channels extends React.Component {
     this.setState({ firstLoad: false });
   };
 
+  handleAddChannel = (newChannel) => {
+    this.closeAddModal();
+    this.props.setCurrentChannel(newChannel);
+    this.setState({ channelName: "", channelDetails: "" });
+    this.setActiveChannel(newChannel);
+    console.log("channel added");
+  }
+
   addChannel = () => {
     const { channelsRef, channelName, channelDetails, user } = this.state;
 
@@ -70,9 +79,7 @@ class Channels extends React.Component {
       .child(key)
       .update(newChannel)
       .then(() => {
-        this.setState({ channelName: "", channelDetails: "" });
-        this.closeModal();
-        console.log("channel added");
+        this.handleAddChannel(newChannel)
       })
       .catch(err => {
         console.error(err);
@@ -118,12 +125,14 @@ class Channels extends React.Component {
   isFormValid = ({ channelName, channelDetails }) =>
     channelName && channelDetails;
 
-  openModal = () => this.setState({ modal: true });
+  openAddModal = () => this.setState({ addChannelModal: true });
 
-  closeModal = () => this.setState({ modal: false });
+  closeAddModal = () => this.setState({ addChannelModal: false });
+
+  
 
   render() {
-    const { channels, modal } = this.state;
+    const { channels, addChannelModal } = this.state;
 
     return (
       <React.Fragment>
@@ -132,13 +141,15 @@ class Channels extends React.Component {
             <span>
               <Icon name="exchange" /> CHANNELS
             </span>{" "}
-            ({channels.length}) <Icon name="add" onClick={this.openModal} />
+            ({channels.length}) 
+            {/* <Icon name="remove" onClick={this.subChannelModal} /> */}
+            <Icon name="add" onClick={this.openAddModal} />
           </Menu.Item>
           {this.displayChannels(channels)}
         </Menu.Menu>
 
         {/* Add Channel Modal */}
-        <Modal basic open={modal} onClose={this.closeModal}>
+        <Modal basic open={addChannelModal} onClose={this.closeAddModal}>
           <Modal.Header>Add a Channel</Modal.Header>
           <Modal.Content>
             <Form onSubmit={this.handleSubmit}>
@@ -166,7 +177,7 @@ class Channels extends React.Component {
             <Button color="green" inverted onClick={this.handleSubmit}>
               <Icon name="checkmark" /> Add
             </Button>
-            <Button color="red" inverted onClick={this.closeModal}>
+            <Button color="red" inverted onClick={this.closeAddModal}>
               <Icon name="remove" /> Cancel
             </Button>
           </Modal.Actions>
